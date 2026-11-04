@@ -1,0 +1,5 @@
+mountpoints:
+  /:
+    url: "https://author-p135178-e1337005.adobeaemcloud.com/bin/franklin.delivery/edshol/edsue/main"
+    type: "markup"
+    suffix: ".html"
