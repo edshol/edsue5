@@ -44,7 +44,8 @@ function toRow(item) {
 async function fetchItems(sheet) {
   // CF_FETCH_ORIGIN lets you test against another host; delivery URLs still use publishOrigin.
   const origin = process.env.CF_FETCH_ORIGIN || config.publishOrigin;
-  const url = `${origin}/graphql/execute.json/${sheet.persistedQuery}`;
+  // Cache buster: persisted query responses are CDN-cached (s-maxage=7200) on AEM Publish.
+  const url = `${origin}/graphql/execute.json/${sheet.persistedQuery}?cb=${Date.now()}`;
   const resp = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!resp.ok) throw new Error(`${sheet.name}: ${url} -> HTTP ${resp.status}`);
   const json = await resp.json();
