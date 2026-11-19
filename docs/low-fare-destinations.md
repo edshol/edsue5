@@ -26,13 +26,10 @@ CF の置き場所：`/content/dam/hol/lowfare-destinations/`（サンプル10�
 
 ## 2. CF の読み込み方
 
-| 表示する場所 | API | 備考 |
-|---|---|---|
-| UE（AEM author） | Sites API `/adobe/sites/cf/fragments?path=<フォルダ>` | 同じドメイン。下書きの内容がすぐ反映される |
-| `.aem.page` / `.aem.live` | Delivery API `https://publish-p236456-e2388687.adobeaemcloud.com/adobe/contentFragments?path=<フォルダ>` | **CF・画像・モデルの publish** と、**EDS のドメインからの CORS 許可**が必要 |
-
-- 選ばれた CF のフォルダごとに1回だけ取得します（通常は1リクエスト）。
-- Publish 側の URL はページのメタデータ `aem-publish-origin` で変更できます。
+| 表示する場所 | 読み込み元 |
+|---|---|
+| UE（AEM author） | Sites API `/adobe/sites/cf/fragments?path=<フォルダ>`（下書きもすぐ反映） |
+| `.aem.page` / `.aem.live` | CF シート `/data/cf/lowfare-destinations.json`（publish 済みの CF から自動生成。`docs/cf-sheets.md`） |
 
 ## 3. 出発地はパスで決める（`scripts/market.js`）
 

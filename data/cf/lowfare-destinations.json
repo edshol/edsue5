@@ -1,0 +1,96 @@
+{
+  "total": 10,
+  "offset": 0,
+  "limit": 10,
+  "columns": [
+    "path",
+    "airportCode",
+    "cityName",
+    "link",
+    "imagePortrait",
+    "imageLandscape"
+  ],
+  "data": [
+    {
+      "path": "/content/dam/hol/lowfare-destinations/bangkok",
+      "airportCode": "BKK",
+      "cityName": "Bangkok",
+      "link": "/my/en/plan-trip/destinations/flights-to-bangkok",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-bangkok.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-bangkok.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/denpasar-bali",
+      "airportCode": "DPS",
+      "cityName": "Denpasar, Bali",
+      "link": "/my/en/plan-trip/destinations/flights-to-denpasar-bali",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-denpasar-bali.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-denpasar-bali.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/hong-kong",
+      "airportCode": "HKG",
+      "cityName": "Hong Kong",
+      "link": "/my/en/plan-trip/destinations/flights-to-hong-kong",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-hong-kong.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-hong-kong.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/kota-kinabalu",
+      "airportCode": "BKI",
+      "cityName": "Kota Kinabalu",
+      "link": "/my/en/plan-trip/destinations/flights-to-kota-kinabalu",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-kota-kinabalu.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-kota-kinabalu.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/langkawi",
+      "airportCode": "LGK",
+      "cityName": "Langkawi",
+      "link": "/my/en/plan-trip/destinations/flights-to-langkawi",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-langkawi.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-langkawi.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/melbourne",
+      "airportCode": "MEL",
+      "cityName": "Melbourne",
+      "link": "/my/en/plan-trip/destinations/flights-to-melbourne",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-melbourne.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-melbourne.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/osaka",
+      "airportCode": "KIX",
+      "cityName": "Osaka",
+      "link": "/my/en/plan-trip/destinations/flights-to-osaka",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-osaka.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-osaka.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/penang",
+      "airportCode": "PEN",
+      "cityName": "Penang",
+      "link": "/my/en/plan-trip/destinations/flights-to-penang",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-penang.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-penang.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/seoul",
+      "airportCode": "ICN",
+      "cityName": "Seoul",
+      "link": "/my/en/plan-trip/destinations/flights-to-seoul",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-seoul.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-seoul.jpg"
+    },
+    {
+      "path": "/content/dam/hol/lowfare-destinations/sydney",
+      "airportCode": "SYD",
+      "cityName": "Sydney",
+      "link": "/my/en/plan-trip/destinations/flights-to-sydney",
+      "imagePortrait": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-sydney.jpg",
+      "imageLandscape": "https://publish-p236456-e2388687.adobeaemcloud.com/content/dam/draft/mh/importimage/flights-to-sydney.jpg"
+    }
+  ],
+  ":type": "sheet"
+}

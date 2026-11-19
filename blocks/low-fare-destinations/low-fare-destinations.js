@@ -9,22 +9,21 @@
  *   - Prices come from the fare API, never from authoring.
  *
  * CF data source:
- *   - AEM author (Universal Editor): Sites API  /adobe/sites/cf/fragments (same origin, drafts)
- *   - *.aem.page / *.aem.live:       Delivery API /adobe/contentFragments on AEM Publish
- *     (needs the CFs + images published, and CORS for the EDS origins)
+ *   - AEM author (Universal Editor): Sites API /adobe/sites/cf/fragments (same origin, drafts)
+ *   - *.aem.page / *.aem.live: the CF sheet /data/cf/lowfare-destinations.json, generated from
+ *     PUBLISHED CFs by tools/cf-sheets (GitHub Action). Authors only edit + publish CFs.
  */
 import { createOptimizedPicture, getMetadata } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import { resolveOrigin } from '../../scripts/market.js';
 
-const PUBLISH_ORIGIN = 'https://publish-p236456-e2388687.adobeaemcloud.com';
+const CF_SHEET = '/data/cf/lowfare-destinations.json';
 const DEMO_FARE_API = '/data/demo-fares.json';
 const MAX_DESTINATIONS = 15;
 const FARE_CACHE_TTL = 30 * 60 * 1000;
 const DESKTOP_MQ = '(min-width: 900px)';
 
 const isAuthor = () => window.location.hostname.startsWith('author-');
-const aemOrigin = () => (isAuthor() ? '' : (getMetadata('aem-publish-origin') || PUBLISH_ORIGIN));
 const cleanPath = (href) => {
   try {
     return new URL(href, window.location.href).pathname.replace(/\.html$/, '').replace(/\/$/, '');
@@ -44,49 +43,54 @@ function getJson(url, init) {
   return jsonRequests.get(url);
 }
 
-/** Field value from either API shape: Sites API [{name, values}] or Delivery API { name: value } */
-function fieldValue(item, name) {
-  const { fields } = item;
-  if (Array.isArray(fields)) {
-    const f = fields.find((x) => x.name === name);
-    return f ? (f.values?.[0] ?? f.value ?? '') : '';
-  }
-  const v = fields?.[name];
-  return Array.isArray(v) ? (v[0] ?? '') : (v ?? '');
-}
-
-/** Image reference -> URL for the current tier. */
-function imageUrl(ref) {
-  if (!ref) return '';
-  if (typeof ref === 'string') return isAuthor() ? ref : `${aemOrigin()}${ref}`;
-  const direct = ref.deliveryUrl || ref.publishUrl || ref.url;
-  if (direct) return direct.startsWith('/') ? `${aemOrigin()}${direct}` : direct;
-  const path = ref.path || ref.value || '';
-  if (!path) return '';
-  return isAuthor() ? path : `${aemOrigin()}${path}`;
-}
-
-function normalize(item) {
+/** Author (Sites API) item -> tile data. Fields come as [{ name, values: [...] }]. */
+function fromSitesApi(item) {
+  const v = (name) => `${(item.fields || []).find((f) => f.name === name)?.values?.[0] ?? ''}`.trim();
   return {
     path: item.path,
-    airportCode: `${fieldValue(item, 'airportCode')}`.trim().toUpperCase(),
-    cityName: `${fieldValue(item, 'cityName')}`.trim(),
-    link: `${fieldValue(item, 'link')}`.trim(),
-    imagePortrait: imageUrl(fieldValue(item, 'imagePortrait')),
-    imageLandscape: imageUrl(fieldValue(item, 'imageLandscape')),
+    airportCode: v('airportCode').toUpperCase(),
+    cityName: v('cityName'),
+    link: v('link'),
+    imagePortrait: v('imagePortrait'),
+    imageLandscape: v('imageLandscape'),
   };
 }
 
-/** Load the selected CFs, one request per CF folder. Returns Map<path, cf>. */
+/** CF sheet row -> tile data (references are already absolute Publish URLs). */
+function fromSheetRow(row) {
+  return {
+    path: row.path,
+    airportCode: `${row.airportCode || ''}`.trim().toUpperCase(),
+    cityName: `${row.cityName || ''}`.trim(),
+    link: `${row.link || ''}`.trim(),
+    imagePortrait: `${row.imagePortrait || ''}`.trim(),
+    imageLandscape: `${row.imageLandscape || ''}`.trim(),
+  };
+}
+
+/**
+ * Selected CFs -> Map<path, tile data>.
+ * Author: live drafts from the Sites API (one request per CF folder).
+ * EDS:    the CF sheet (one same-origin, CDN-cached request).
+ */
 async function loadDestinations(paths) {
-  const folders = [...new Set(paths.map(parentOf).filter(Boolean))];
-  const responses = await Promise.all(folders.map((folder) => (isAuthor()
-    ? getJson(`/adobe/sites/cf/fragments?path=${encodeURIComponent(folder)}&projection=full&limit=50`, { credentials: 'include' })
-    : getJson(`${aemOrigin()}/adobe/contentFragments?path=${encodeURIComponent(folder)}&limit=50`))));
   const map = new Map();
-  responses.forEach((json) => (json?.items || []).forEach((item) => {
-    if (item?.path) map.set(item.path, normalize(item));
-  }));
+  if (isAuthor()) {
+    const folders = [...new Set(paths.map(parentOf).filter(Boolean))];
+    const responses = await Promise.all(folders.map((folder) => getJson(
+      `/adobe/sites/cf/fragments?path=${encodeURIComponent(folder)}&projection=full&limit=50`,
+      { credentials: 'include' },
+    )));
+    responses.forEach((json) => (json?.items || []).forEach((item) => {
+      if (item?.path) map.set(item.path, fromSitesApi(item));
+    }));
+    return map;
+  }
+  const sheet = getMetadata('low-fare-destinations-sheet') || `${window.hlx?.codeBasePath || ''}${CF_SHEET}`;
+  const json = await getJson(sheet);
+  (json?.data || []).forEach((row) => {
+    if (row?.path) map.set(row.path, fromSheetRow(row));
+  });
   return map;
 }
 
