@@ -52,7 +52,7 @@ CF の置き場所：`/content/dam/hol/lowfare-destinations/`（サンプル10�
 | 呼ぶ URL（既定） | `https://publish-p236456-e2388687.adobeaemcloud.com/graphql/execute.json/global/lowfare-fares;origin=KUL` |
 | 返す形式 | `{ data: { mhFareList: { items: [{ origin, destination, price, currency }] } } }` |
 | リクエスト数 | 1ページにつき1回（出発地の運賃一覧をまとめて取得） |
-| キャッシュ | ブラウザ30秒、CDN 60秒（永続クエリ側の設定）。ブロック側の保持は60秒（メタデータ `low-fare-cache-seconds` で変更でき、`0` で保持しない） |
+| キャッシュ | ブラウザ10秒、CDN 10秒（`stale-while-revalidate` は1秒。永続クエリ側の設定）。ブロック側の保持は10秒（メタデータ `low-fare-cache-seconds` で変更でき、`0` で保持しない） |
 | UE（author） | 同じクエリを author から読むので、publish 前の運賃も確認できる |
 
 **外部 API への切り替え：** メタデータ `low-fare-api` に URL テンプレートを1行入れるだけです（一括メタデータで `/**` に設定すれば全ページに効きます）。
@@ -60,7 +60,7 @@ CF の置き場所：`/content/dam/hol/lowfare-destinations/`（サンプル10�
 - `{destination}` も含む URL → 1路線ずつ返す API
 - 受け付ける形式：一覧（`items` / `fares` / `data` の配列。各要素に origin・destination・price・currency。大文字小文字は問わない）、または1件（`{ price, currency }`）
 
-運賃 CF の作り方：CF モデル **MH Fare**（origin・destination：大文字3文字、price：数値、currency：大文字3文字。すべて必須）で作って **publish** します。60秒ほどで表示に反映されます。
+運賃 CF の作り方：CF モデル **MH Fare**（origin・destination：大文字3文字、price：数値、currency：大文字3文字。すべて必須）で作って **publish** します。約10秒で表示に反映されます。
 
 ## 5. UE での入力チェック
 
