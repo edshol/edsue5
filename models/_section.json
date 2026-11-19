@@ -33,6 +33,14 @@
             {
               "name": "Highlight",
               "value": "highlight"
+            },
+            {
+              "name": "Center",
+              "value": "text-center"
+            },
+            {
+              "name": "BG Gray",
+              "value": "bg-gray"
             }
           ]
         }
@@ -50,7 +58,12 @@
         "hero",
         "cards",
         "columns",
-        "fragment"
+        "fragment",
+        "quote",
+        "tabs",
+        "video-teaser",
+        "visual-content-fragment",
+        "low-fare-destinations"
       ]
     }
   ]

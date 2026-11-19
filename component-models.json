@@ -1,37 +1,5 @@
 [
   {
-    "id": "quote",
-    "fields": [
-      {
-        "component": "richtext",
-        "name": "quote",
-        "value": "",
-        "label": "Quote",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author",
-        "label": "Author",
-        "value": ""
-      },
-      {
-        "component": "select",
-        "name": "classes",
-        "value": "",
-        "label": "Background Color",
-        "description": "The quote background color",
-        "valueType": "string",
-        "options": [
-          {"name": "Red", "value": "bg-red"},
-          {"name": "Green", "value": "bg-green"},
-          {"name": "Blue", "value": "bg-blue"}
-        ]
-      }
-    ]
-  },
-  {
     "id": "page-metadata",
     "fields": [
       {
@@ -201,31 +169,6 @@
     ]
   },
   {
-    "id": "tab",
-    "fields": [
-      {
-        "component": "text",
-        "name": "tabname",
-        "label": "Tab Name",
-        "description": "The label shown for this Tab"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
-      }
-    ]
-  },  
-  {
     "id": "columns",
     "fields": [
       {
@@ -250,9 +193,18 @@
         "description": "The Hero style",
         "valueType": "string",
         "options": [
-          {"name": "Default", "value": ""},
-          {"name": "Hero", "value": "col-hero"},
-          {"name": "Red", "value": "col-red"}
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Hero",
+            "value": "col-hero"
+          },
+          {
+            "name": "Red",
+            "value": "col-red"
+          }
         ]
       }
     ]
@@ -283,6 +235,143 @@
         "name": "imageAlt",
         "label": "Alt",
         "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "low-fare-destinations",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "Explore our top destinations from",
+        "required": true,
+        "description": "出発地の都市名はページのパス（国）から自動で付きます。ここには入力しません。",
+        "validation": {
+          "maxSize": 80
+        }
+      },
+      {
+        "component": "aem-content",
+        "name": "viewAll",
+        "label": "View all link",
+        "description": "「View all」ボタンのリンク先ページ"
+      },
+      {
+        "component": "select",
+        "name": "classes_variant",
+        "label": "Layout",
+        "valueType": "string",
+        "value": "variant-2",
+        "options": [
+          {
+            "name": "Variant 2 (3 tiles, wide tile alternates)",
+            "value": "variant-2"
+          },
+          {
+            "name": "Variant 1 (simple grid)",
+            "value": "variant-1"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "classes_visibility",
+        "label": "Visibility",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Hide in Desktop",
+            "value": "hide-desktop"
+          },
+          {
+            "name": "Hide in Mobile",
+            "value": "hide-mobile"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "low-fare-destination",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "destination",
+        "label": "Destination (Content Fragment)",
+        "required": true,
+        "description": "/content/dam/hol/lowfare-destinations から行き先の Content Fragment（MH Low Fare Destination）を選びます。都市名・空港コード・写真は CF 側で管理し、価格は自動で取得します。",
+        "validation": {
+          "rootPath": "/content/dam/hol/lowfare-destinations"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quote",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "quote",
+        "value": "",
+        "label": "Quote",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author",
+        "label": "Author",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Background Color",
+        "description": "The quote background color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Red",
+            "value": "bg-red"
+          },
+          {
+            "name": "Green",
+            "value": "bg-green"
+          },
+          {
+            "name": "Blue",
+            "value": "bg-blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tab",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabname",
+        "label": "Tab Name",
+        "description": "The label shown for this Tab"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
       },
       {
         "component": "richtext",
@@ -325,11 +414,26 @@
         "label": "Style",
         "valueType": "string",
         "options": [
-          {"name": "Default", "value": ""},
-          {"name": "Full width", "value": "full-width"},
-          {"name": "Short", "value": "short"},
-          {"name": "Tall", "value": "tall"},
-          {"name": "Contain video", "value": "contain"}
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Full width",
+            "value": "full-width"
+          },
+          {
+            "name": "Short",
+            "value": "short"
+          },
+          {
+            "name": "Tall",
+            "value": "tall"
+          },
+          {
+            "name": "Contain video",
+            "value": "contain"
+          }
         ]
       }
     ]
@@ -351,7 +455,10 @@
         "value": "destination_campaign",
         "description": "Rendering template.",
         "options": [
-          {"name": "Destination Campaign", "value": "destination_campaign"}
+          {
+            "name": "Destination Campaign",
+            "value": "destination_campaign"
+          }
         ]
       }
     ]

@@ -19,19 +19,14 @@
       "quote",
       "tabs",
       "video-teaser",
-      "visual-content-fragment"
+      "visual-content-fragment",
+      "low-fare-destinations"
     ]
   },
   {
     "id": "cards",
     "components": [
       "card"
-    ]
-  },
-  {
-    "id": "tabs",
-    "components": [
-      "tab"
     ]
   },
   {
@@ -47,6 +42,18 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "low-fare-destinations",
+    "components": [
+      "low-fare-destination"
+    ]
+  },
+  {
+    "id": "tabs",
+    "components": [
+      "tab"
     ]
   }
 ]
