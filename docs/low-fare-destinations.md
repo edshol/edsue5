@@ -9,41 +9,30 @@
 | 出発地 | ページのパス（国）から自動で決まる | 入力しない |
 | 価格 | 運賃 API から自動取得 | 入力しない |
 
-## 1. CF モデル `destination`（AEM）
+## 1. CF モデル「MH Low Fare Destination」（AEM：p236456-e2388687）
 
-場所：`/conf/eds-ue/settings/dam/cfm/models/destination`
+場所：`/conf/global/settings/dam/cfm/models/mh-low-fare-destination`（既存の MH モデルと同じ global 設定）
 
-| フィールド | 名前（GraphQL） | 型 | 入力チェック |
+| フィールド | 名前 | 型 | 入力チェック |
 |---|---|---|---|
-| Airport Code | `airportCode` | 1行テキスト | 必須、`^[A-Z]{3}$`、一意 |
-| City Name | `cityName` | 1行テキスト | 必須、最大 60 文字（翻訳対象） |
-| Image (Portrait / Mobile) | `imagePortrait` | コンテンツ参照（画像のみ） | 必須、`/content/dam` 配下 |
-| Image (Landscape / Desktop) | `imageLandscape` | コンテンツ参照（画像のみ） | 任意（無ければ Portrait を使用） |
-| Link | `link` | 1行テキスト | 任意 |
+| Airport Code (IATA) | `airportCode` | 1行テキスト | 必須、`^[A-Z]{3}$`、一意、最大3文字 |
+| City Name | `cityName` | 1行テキスト | 必須、最大60文字、翻訳対象 |
+| Image (Portrait / Mobile) | `imagePortrait` | コンテンツ参照 | 必須 |
+| Image (Landscape / Desktop) | `imageLandscape` | コンテンツ参照 | 任意（無ければ Portrait を使用） |
+| Link | `link` | 1行テキスト | 任意、最大255文字 |
 
-CF の置き場所：`/content/dam/eds-ue/destinations/`（このフォルダに `destination` モデルだけを許可）。
+CF の置き場所：`/content/dam/hol/lowfare-destinations/`（サンプル10件：Seoul, Osaka, Melbourne, Bangkok, Denpasar Bali, Langkawi, Penang, Sydney, Hong Kong, Kota Kinabalu。写真は `/content/dam/draft/mh/importimage/`）。
 ブロックの入力欄でも、このフォルダ以外は選べないようにしています（`validation.rootPath`）。
 
-## 2. GraphQL 永続クエリ `eds-ue/destinations`
+## 2. CF の読み込み方
 
-```graphql
-query {
-  destinationList(filter: { _path: { _expressions: [{ value: "/content/dam/eds-ue/destinations/", _operator: STARTS_WITH }] } }) {
-    items {
-      _path
-      airportCode
-      cityName
-      link
-      imagePortrait { ... on ImageRef { _path _publishUrl _dynamicUrl } }
-      imageLandscape { ... on ImageRef { _path _publishUrl _dynamicUrl } }
-    }
-  }
-}
-```
+| 表示する場所 | API | 備考 |
+|---|---|---|
+| UE（AEM author） | Sites API `/adobe/sites/cf/fragments?path=<フォルダ>` | 同じドメイン。下書きの内容がすぐ反映される |
+| `.aem.page` / `.aem.live` | Delivery API `https://publish-p236456-e2388687.adobeaemcloud.com/adobe/contentFragments?path=<フォルダ>` | **CF・画像・モデルの publish** と、**EDS のドメインからの CORS 許可**が必要 |
 
-- 全部の行き先を1回のリクエストで取得し、CDN にキャッシュされます。ブロックは必要な CF だけを使います。
-- UE（AEM author）では author の同じドメインから下書きの内容を読み、`.aem.page` / `.aem.live` では AEM Publish から読みます。
-- **Publish 側で CORS の設定が必要です：** `https://*.aem.page`、`https://*.aem.live`（と本番ドメイン）から `/graphql/execute.json/*` を GET できるようにします（AEM のコードリポジトリの OSGi 設定 `com.adobe.granite.cors.impl.CORSPolicyImpl~eds.cfg.json`）。
+- 選ばれた CF のフォルダごとに1回だけ取得します（通常は1リクエスト）。
+- Publish 側の URL はページのメタデータ `aem-publish-origin` で変更できます。
 
 ## 3. 出発地はパスで決める（`scripts/market.js`）
 

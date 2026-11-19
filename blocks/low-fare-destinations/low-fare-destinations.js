@@ -1,23 +1,23 @@
-/* eslint-disable no-underscore-dangle -- AEM GraphQL system fields (_path, _dynamicUrl, ...) */
 /*
  * Low Fare Destinations (Universal Editor + Content Fragments)
  *
- * Authors only pick WHICH destinations to show and in WHAT order (Destination CFs).
- *   - Destination data (airport code, city name, images, link) lives in the "destination"
- *     Content Fragment model, managed once and reused by every market.
+ * Authors only pick WHICH destinations to show and in WHAT order
+ * ("MH Low Fare Destination" CFs, model /conf/global/.../mh-low-fare-destination).
+ *   - Destination data (airport code, city name, images, link) lives in the CF,
+ *     managed once and reused by every market.
  *   - The origin comes from the page path (scripts/market.js), not from authoring.
  *   - Prices come from the fare API, never from authoring.
  *
- * CF data is read with the AEM GraphQL persisted query <PQ_NAME>:
- *   - on AEM author (Universal Editor): same origin, draft content
- *   - on *.aem.page / *.aem.live: AEM Publish (needs CORS for the EDS origins)
+ * CF data source:
+ *   - AEM author (Universal Editor): Sites API  /adobe/sites/cf/fragments (same origin, drafts)
+ *   - *.aem.page / *.aem.live:       Delivery API /adobe/contentFragments on AEM Publish
+ *     (needs the CFs + images published, and CORS for the EDS origins)
  */
 import { createOptimizedPicture, getMetadata } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 import { resolveOrigin } from '../../scripts/market.js';
 
-const PUBLISH_ORIGIN = 'https://publish-p135178-e1337005.adobeaemcloud.com';
-const PQ_NAME = 'eds-ue/destinations';
+const PUBLISH_ORIGIN = 'https://publish-p236456-e2388687.adobeaemcloud.com';
 const DEMO_FARE_API = '/data/demo-fares.json';
 const MAX_DESTINATIONS = 15;
 const FARE_CACHE_TTL = 30 * 60 * 1000;
@@ -32,6 +32,7 @@ const cleanPath = (href) => {
     return '';
   }
 };
+const parentOf = (path) => path.substring(0, path.lastIndexOf('/'));
 
 const jsonRequests = new Map();
 function getJson(url, init) {
@@ -43,21 +44,50 @@ function getJson(url, init) {
   return jsonRequests.get(url);
 }
 
-/** All Destination CFs, keyed by DAM path. One cacheable request per page. */
-async function loadDestinations() {
-  const json = await getJson(`${aemOrigin()}/graphql/execute.json/${PQ_NAME}`, {
-    credentials: isAuthor() ? 'include' : 'omit',
-  });
-  const items = json?.data?.destinationList?.items || [];
-  return new Map(items.map((item) => [item._path, item]));
+/** Field value from either API shape: Sites API [{name, values}] or Delivery API { name: value } */
+function fieldValue(item, name) {
+  const { fields } = item;
+  if (Array.isArray(fields)) {
+    const f = fields.find((x) => x.name === name);
+    return f ? (f.values?.[0] ?? f.value ?? '') : '';
+  }
+  const v = fields?.[name];
+  return Array.isArray(v) ? (v[0] ?? '') : (v ?? '');
 }
 
-/** Image URL for the current tier. Author: DAM path. Publish: web-optimized delivery. */
+/** Image reference -> URL for the current tier. */
 function imageUrl(ref) {
   if (!ref) return '';
-  if (isAuthor()) return ref._path || '';
-  if (ref._dynamicUrl) return `${aemOrigin()}${ref._dynamicUrl}`;
-  return ref._publishUrl || '';
+  if (typeof ref === 'string') return isAuthor() ? ref : `${aemOrigin()}${ref}`;
+  const direct = ref.deliveryUrl || ref.publishUrl || ref.url;
+  if (direct) return direct.startsWith('/') ? `${aemOrigin()}${direct}` : direct;
+  const path = ref.path || ref.value || '';
+  if (!path) return '';
+  return isAuthor() ? path : `${aemOrigin()}${path}`;
+}
+
+function normalize(item) {
+  return {
+    path: item.path,
+    airportCode: `${fieldValue(item, 'airportCode')}`.trim().toUpperCase(),
+    cityName: `${fieldValue(item, 'cityName')}`.trim(),
+    link: `${fieldValue(item, 'link')}`.trim(),
+    imagePortrait: imageUrl(fieldValue(item, 'imagePortrait')),
+    imageLandscape: imageUrl(fieldValue(item, 'imageLandscape')),
+  };
+}
+
+/** Load the selected CFs, one request per CF folder. Returns Map<path, cf>. */
+async function loadDestinations(paths) {
+  const folders = [...new Set(paths.map(parentOf).filter(Boolean))];
+  const responses = await Promise.all(folders.map((folder) => (isAuthor()
+    ? getJson(`/adobe/sites/cf/fragments?path=${encodeURIComponent(folder)}&projection=full&limit=50`, { credentials: 'include' })
+    : getJson(`${aemOrigin()}/adobe/contentFragments?path=${encodeURIComponent(folder)}&limit=50`))));
+  const map = new Map();
+  responses.forEach((json) => (json?.items || []).forEach((item) => {
+    if (item?.path) map.set(item.path, normalize(item));
+  }));
+  return map;
 }
 
 function withWidth(url, width) {
@@ -69,11 +99,11 @@ function withWidth(url, width) {
 }
 
 function buildPicture(cf) {
-  const portrait = imageUrl(cf.imagePortrait);
-  const landscape = imageUrl(cf.imageLandscape) || portrait;
+  const portrait = cf.imagePortrait;
+  const landscape = cf.imageLandscape || portrait;
   const base = portrait || landscape;
   if (!base) return null;
-  // Same-origin (EDS media / author DAM): use the standard EDS helper.
+  // Same-origin (author DAM): use the standard EDS helper.
   if (base.startsWith('/')) {
     const picture = createOptimizedPicture(base, cf.cityName, false, [{ width: '750' }]);
     if (landscape && landscape !== base) {
@@ -209,7 +239,7 @@ export default async function decorate(block) {
   if (![...block.classList].some((c) => c.startsWith('variant-'))) block.classList.add('variant-2');
   if (origin) block.dataset.origin = origin.code;
 
-  const destinations = await loadDestinations();
+  const destinations = await loadDestinations(items.map((i) => i.path));
   const tiles = [];
   items.forEach(({ row, path }) => {
     const cf = destinations.get(path);

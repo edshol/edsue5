@@ -309,9 +309,9 @@
         "name": "destination",
         "label": "Destination (Content Fragment)",
         "required": true,
-        "description": "/content/dam/eds-ue/destinations から行き先の Content Fragment を選びます。都市名・空港コード・写真は CF 側で管理し、価格は自動で取得します。",
+        "description": "/content/dam/hol/lowfare-destinations から行き先の Content Fragment（MH Low Fare Destination）を選びます。都市名・空港コード・写真は CF 側で管理し、価格は自動で取得します。",
         "validation": {
-          "rootPath": "/content/dam/eds-ue/destinations"
+          "rootPath": "/content/dam/hol/lowfare-destinations"
         }
       }
     ]
