@@ -1,0 +1,14 @@
+query LowFareDestinations {
+  mhLowFareDestinationList(
+    filter: { _path: { _expressions: [{ value: "/content/dam/hol/lowfare-destinations/", _operator: STARTS_WITH }] } }
+  ) {
+    items {
+      _path
+      airportCode
+      cityName
+      link
+      imagePortrait { ... on ImageRef { _path _publishUrl _dynamicUrl } }
+      imageLandscape { ... on ImageRef { _path _publishUrl _dynamicUrl } }
+    }
+  }
+}

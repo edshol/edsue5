@@ -1,0 +1,50 @@
+name: CF sheets
+
+# Rebuild data/cf/*.json from PUBLISHED Content Fragments (AEM Publish GraphQL persisted queries).
+# Triggers:
+#   - every 10 minutes
+#   - manually (Actions > CF sheets > Run workflow)
+#   - instantly via repository_dispatch "cf-published" (e.g. from an AEM publish event / webhook)
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      sheet:
+        description: 'Sheet name (empty = all)'
+        required: false
+  repository_dispatch:
+    types: [cf-published]
+
+concurrency:
+  group: cf-sheets
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build sheets from Content Fragments
+        env:
+          SHEET: ${{ github.event.inputs.sheet || github.event.client_payload.sheet || '' }}
+        run: |
+          if [ -n "$SHEET" ] && ! printf '%s' "$SHEET" | grep -Eq '^[a-z0-9-]+$'; then echo "invalid sheet name"; exit 1; fi
+          node tools/cf-sheets/build.mjs $SHEET
+      - name: Commit if changed
+        run: |
+          git add data/cf
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git config user.name "cf-sheets"
+            git config user.email "actions@users.noreply.github.com"
+            git commit -m "chore(cf-sheets): update $(git diff --cached --name-only | xargs -n1 basename | tr '\n' ' ')"
+            git push
+          fi

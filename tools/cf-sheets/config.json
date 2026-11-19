@@ -1,0 +1,14 @@
+{
+  "publishOrigin": "https://publish-p236456-e2388687.adobeaemcloud.com",
+  "authorOrigin": "https://author-p236456-e2388687.adobeaemcloud.com",
+  "sheets": [
+    {
+      "name": "lowfare-destinations",
+      "description": "MH Low Fare Destination CFs (/content/dam/hol/lowfare-destinations) for the low-fare-destinations block",
+      "persistedQuery": "global/lowfare-destinations",
+      "query": "queries/lowfare-destinations.graphql",
+      "list": "mhLowFareDestinationList",
+      "output": "data/cf/lowfare-destinations.json"
+    }
+  ]
+}
