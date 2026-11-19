@@ -25,6 +25,34 @@
         "stale-while-revalidate": 1,
         "stale-if-error": 86400
       }
+    },
+    {
+      "name": "injections",
+      "description": "Authored JS injections (MH Injection CFs in /content/dam/hol/injections). Read by scripts/injections.js at display time.",
+      "persistedQuery": "global/injections",
+      "query": "queries/injections.graphql",
+      "cacheControl": {
+        "max-age": 10
+      },
+      "surrogateControl": {
+        "max-age": 10,
+        "stale-while-revalidate": 1,
+        "stale-if-error": 86400
+      }
+    },
+    {
+      "name": "overrides",
+      "description": "No-code page overrides (MH Override CFs in /content/dam/hol/overrides). Read by scripts/overrides.js at display time.",
+      "persistedQuery": "global/overrides",
+      "query": "queries/overrides.graphql",
+      "cacheControl": {
+        "max-age": 10
+      },
+      "surrogateControl": {
+        "max-age": 10,
+        "stale-while-revalidate": 1,
+        "stale-if-error": 86400
+      }
     }
   ]
 }

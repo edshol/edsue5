@@ -1,0 +1,20 @@
+# Authored JS injections (MH Injection CFs). Read at display time by scripts/injections.js.
+query Injections {
+  mhInjectionList(
+    filter: { _path: { _expressions: [{ value: "/content/dam/hol/injections/", _operator: STARTS_WITH }] } }
+    sort: "injectionId ASC"
+  ) {
+    items {
+      _path
+      injectionId
+      enabled
+      paths
+      exclude
+      device
+      timing
+      start
+      end
+      script { plaintext }
+    }
+  }
+}

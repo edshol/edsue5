@@ -1,0 +1,20 @@
+# No-code page overrides (MH Override CFs). Read at display time by scripts/overrides.js.
+query Overrides {
+  mhOverrideList(
+    filter: { _path: { _expressions: [{ value: "/content/dam/hol/overrides/", _operator: STARTS_WITH }] } }
+    sort: "_path ASC"
+  ) {
+    items {
+      _path
+      enabled
+      paths
+      exclude
+      device
+      start
+      end
+      selector
+      action
+      value { plaintext }
+    }
+  }
+}
