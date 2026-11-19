@@ -37,14 +37,10 @@ https://<branch>--edsue5--edshol.aem.page/data/cf/<name>.json（同じドメイ�
 - 内容が変わっていなければコミットしません。
 - 手動実行や即時トリガーで渡すシート名は英小文字・数字・ハイフンだけ受け付けます。
 
-## 即時反映（任意）
+## 即時反映
 
-10分待たずに反映したい場合は、CF の publish をきっかけに次を呼びます（Adobe I/O Events や AEM のワークフローから）。
-
-```
-POST https://api.github.com/repos/edshol/edsue5/dispatches
-{ "event_type": "cf-published", "client_payload": { "sheet": "lowfare-destinations" } }
-```
+CF を publish すると、AEM のイベント → App Builder のアクション → GitHub の repository_dispatch の順に伝わり、該当シートだけがすぐ作り直されます（通常1分前後）。
+設定方法は `tools/cf-sheets/dispatcher/README.md` を参照してください。10分ごとの定期実行も、取りこぼしへの備えとして残しています。
 
 ## ローカルでの確認
 
