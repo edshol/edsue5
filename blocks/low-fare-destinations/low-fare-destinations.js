@@ -185,8 +185,11 @@ function parseRows(block) {
     const link = row.querySelector('a');
     const href = link?.getAttribute('href') || '';
     const text = row.textContent.trim();
-    if (href.includes('/content/dam/') || /^\/content\/dam\//.test(text)) {
-      items.push({ row, path: cleanPath(href || text) });
+    // In Universal Editor every item row is instrumented, even before a CF is chosen.
+    const isItemRow = row.dataset.aueModel === 'low-fare-destination';
+    if (isItemRow || href.includes('/content/dam/') || /^\/content\/dam\//.test(text)) {
+      const raw = href || (/^\/content\/dam\//.test(text) ? text : '');
+      items.push({ row, path: raw ? cleanPath(raw) : '' });
     } else if (link) {
       config.viewAll = { href: link.href, text: link.textContent.trim() };
     } else if (text && !config.title) {
@@ -252,12 +255,21 @@ export default async function decorate(block) {
       tiles.push({ tile, cf });
       list.append(tile);
     } else if (isAuthor()) {
-      // Visible only in Universal Editor, so authors can fix the selection.
-      list.append(buildPlaceholder(row, cf ? `出発地と同じ空港です: ${cf.airportCode}` : `CF が見つかりません: ${path}`));
+      // Visible only in Universal Editor, so authors can select the item and fix it.
+      let message = `CF が見つかりません: ${path}`;
+      if (!path) message = '行き先の CF を選んでください（右のプロパティ → Destination）';
+      else if (cf) message = `出発地と同じ空港です: ${cf.airportCode}`;
+      list.append(buildPlaceholder(row, message));
     }
   });
 
   block.replaceChildren(heading, list);
+  if (isAuthor() && !items.length) {
+    const hint = document.createElement('p');
+    hint.className = 'lfd-hint';
+    hint.textContent = 'コンテンツツリーでこのブロックを選び、「+」→ Low Fare Destination で行き先を追加してください。';
+    block.append(hint);
+  }
 
   if (config.viewAll?.href) {
     const p = document.createElement('p');
