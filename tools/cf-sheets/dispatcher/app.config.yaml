@@ -1,0 +1,19 @@
+# Adobe App Builder app: AEM "Content Fragment published" event -> GitHub repository_dispatch
+# Deployed with `aio app deploy` from this folder (see README.md).
+application:
+  runtimeManifest:
+    packages:
+      cf-sheets:
+        license: Apache-2.0
+        actions:
+          dispatch:
+            function: actions/dispatch/index.js
+            web: 'no'
+            runtime: nodejs:20
+            inputs:
+              GITHUB_TOKEN: $GITHUB_TOKEN
+              GITHUB_REPO: edshol/edsue5
+              # DAM path prefix -> sheet name (must match tools/cf-sheets/config.json)
+              SHEET_ROUTES: '{"/content/dam/hol/lowfare-destinations/":"lowfare-destinations"}'
+            limits:
+              timeout: 30000

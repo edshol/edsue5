@@ -1,0 +1,10 @@
+{
+  "name": "cf-sheets-dispatcher",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AEM Content Fragment published event -> GitHub repository_dispatch (cf-published)",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node actions/dispatch/test.js"
+  }
+}
