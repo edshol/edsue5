@@ -10,5 +10,19 @@
       "list": "mhLowFareDestinationList",
       "output": "data/cf/lowfare-destinations.json"
     }
+  ],
+  "apis": [
+    {
+      "name": "lowfare-fares",
+      "description": "Fare 'API' backed by MH Fare CFs (/content/dam/hol/fares). Called at display time: <publish>/graphql/execute.json/global/lowfare-fares;origin=KUL",
+      "persistedQuery": "global/lowfare-fares",
+      "query": "queries/lowfare-fares.graphql",
+      "cacheControl": {
+        "max-age": 30
+      },
+      "surrogateControl": {
+        "max-age": 60
+      }
+    }
   ]
 }
