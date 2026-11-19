@@ -38,7 +38,7 @@ CF の置き場所：`/content/dam/hol/lowfare-destinations/`（サンプル10�
    |---|---|---|
    | /my/** | KUL | Kuala Lumpur |
    | /sg/** | SIN | Singapore |
-2. 無ければ、パスの先頭（`/my/...`、`/sg/...`）からコードに書いた既定値（`MARKET_ORIGINS`）を使います。※ 国ごとの既定空港は MAG に確認してください。
+2. 無ければ、パスに含まれる国コードからコードに書いた既定値（`MARKET_ORIGINS`）を使います。国コードは**何階層目にあっても構いません**（`/my/en/...`、`/hol/my/en/...` → KUL、`/hol/sg/en/...` → SIN）。※ 国ごとの既定空港は MAG に確認してください。
 3. `?origin=SIN` は確認用です。localhost、`*.aem.page`、AEM author でだけ有効で、本番（`*.aem.live`、本番ドメイン）では無視されます。
 
 出発地と同じ空港の行き先（例：KUL のページの Kuala Lumpur）は自動で表示しません。
