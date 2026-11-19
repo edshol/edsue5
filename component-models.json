@@ -136,6 +136,14 @@
           {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Center",
+            "value": "text-center"
+          },
+          {
+            "name": "BG Gray",
+            "value": "bg-gray"
           }
         ]
       }
@@ -176,6 +184,28 @@
         "name": "rows",
         "value": "",
         "label": "Rows"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Style",
+        "description": "The Hero style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Hero",
+            "value": "col-hero"
+          },
+          {
+            "name": "Red",
+            "value": "col-red"
+          }
+        ]
       }
     ]
   },
@@ -287,6 +317,47 @@
     ]
   },
   {
+    "id": "quote",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "quote",
+        "value": "",
+        "label": "Quote",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author",
+        "label": "Author",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Background Color",
+        "description": "The quote background color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Red",
+            "value": "bg-red"
+          },
+          {
+            "name": "Green",
+            "value": "bg-green"
+          },
+          {
+            "name": "Blue",
+            "value": "bg-blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "tab",
     "fields": [
       {
@@ -308,6 +379,87 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "video-teaser",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "video",
+        "label": "Video asset",
+        "description": "Pick a DAM video asset from the content tree (e.g. /content/dam/.../movie.mp4). The searchable asset selector optimizes as an image and breaks video, so this uses the content-tree picker. For streaming or external sources, use the Video URL field below instead."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "videoUrl",
+        "label": "Video URL (optional)",
+        "value": "",
+        "description": "Overrides the asset. Use for streaming: an .m3u8 manifest, a Dynamic Media OpenAPI / Scene7 URL, or a YouTube link."
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Teaser Text",
+        "description": "Heading + description + an optional CTA link, authored as rich text.",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Full width",
+            "value": "full-width"
+          },
+          {
+            "name": "Short",
+            "value": "short"
+          },
+          {
+            "name": "Tall",
+            "value": "tall"
+          },
+          {
+            "name": "Contain video",
+            "value": "contain"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "visual-content-fragment",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "fragment",
+        "label": "Content Fragment",
+        "description": "Pick the Content Fragment to render from the content tree (e.g. /content/dam/hol/cf/...). The searchable asset selector does not handle Content Fragments, so this uses the content-tree picker."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "template",
+        "label": "Template",
+        "value": "destination_campaign",
+        "description": "Rendering template.",
+        "options": [
+          {
+            "name": "Destination Campaign",
+            "value": "destination_campaign"
+          }
+        ]
       }
     ]
   }

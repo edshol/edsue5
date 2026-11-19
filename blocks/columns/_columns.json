@@ -33,6 +33,28 @@
           "name": "rows",
           "value": "",
           "label": "Rows"
+        },
+        {
+          "component": "select",
+          "name": "classes",
+          "value": "",
+          "label": "Style",
+          "description": "The Hero style",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Hero",
+              "value": "col-hero"
+            },
+            {
+              "name": "Red",
+              "value": "col-red"
+            }
+          ]
         }
       ]
     }
