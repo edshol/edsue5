@@ -27,7 +27,7 @@ const CF_SHEET = '/data/cf/lowfare-destinations.json';
 const PUBLISH_ORIGIN = 'https://publish-p236456-e2388687.adobeaemcloud.com';
 const DEFAULT_FARE_API = '/graphql/execute.json/global/lowfare-fares;origin={origin}';
 const MAX_DESTINATIONS = 15;
-const DEFAULT_FARE_CACHE_SECONDS = 60; // fares change often; metadata "low-fare-cache-seconds"
+const DEFAULT_FARE_CACHE_SECONDS = 10; // fares change often; metadata "low-fare-cache-seconds"
 const DESKTOP_MQ = '(min-width: 900px)';
 
 const isAuthor = () => window.location.hostname.startsWith('author-');

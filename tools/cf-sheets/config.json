@@ -18,10 +18,12 @@
       "persistedQuery": "global/lowfare-fares",
       "query": "queries/lowfare-fares.graphql",
       "cacheControl": {
-        "max-age": 30
+        "max-age": 10
       },
       "surrogateControl": {
-        "max-age": 60
+        "max-age": 10,
+        "stale-while-revalidate": 1,
+        "stale-if-error": 86400
       }
     }
   ]
