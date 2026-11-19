@@ -4,7 +4,8 @@
  * The departure airport is decided by the page path (the market), not by authors:
  *   1. page metadata "origin" / "origin-city"
  *      (set per market with bulk metadata, e.g. /my/** -> KUL)
- *   2. built-in default for the market segment (first path segment, e.g. /sg/en/home -> sg)
+ *   2. built-in default for the market in the path, at any depth
+ *      (e.g. /sg/en/home -> sg, /hol/my/en/home -> my)
  *   3. ?origin=XXX  -- only on non-production hosts (localhost, *.aem.page, AEM author) for testing
  */
 import { getMetadata } from './aem.js';
@@ -35,8 +36,14 @@ export function sitePath(pathname = window.location.pathname) {
   return pathname.replace(/^\/content\/[^/]+/, '').replace(/\.html$/, '') || '/';
 }
 
-export function marketOf(pathname) {
-  return sitePath(pathname).split('/').filter(Boolean)[0]?.toLowerCase() || '';
+/**
+ * Market = the first path segment that is a known market code, at any depth:
+ *   /my/en/home -> my,  /hol/my/en/home -> my,  /content/eds-ue/hol/sg/en -> sg
+ */
+export function marketOf(pathname, markets = MARKET_ORIGINS) {
+  return sitePath(pathname).split('/').filter(Boolean)
+    .map((seg) => seg.toLowerCase())
+    .find((seg) => Object.prototype.hasOwnProperty.call(markets, seg)) || '';
 }
 
 export function isProductionHost(hostname = window.location.hostname) {
