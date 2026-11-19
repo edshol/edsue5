@@ -1,37 +1,5 @@
 [
   {
-    "id": "quote",
-    "fields": [
-      {
-        "component": "richtext",
-        "name": "quote",
-        "value": "",
-        "label": "Quote",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author",
-        "label": "Author",
-        "value": ""
-      },
-      {
-        "component": "select",
-        "name": "classes",
-        "value": "",
-        "label": "Background Color",
-        "description": "The quote background color",
-        "valueType": "string",
-        "options": [
-          {"name": "Red", "value": "bg-red"},
-          {"name": "Green", "value": "bg-green"},
-          {"name": "Blue", "value": "bg-blue"}
-        ]
-      }
-    ]
-  },
-  {
     "id": "page-metadata",
     "fields": [
       {
@@ -168,14 +136,6 @@
           {
             "name": "Highlight",
             "value": "highlight"
-          },
-          {
-            "name": "Center",
-            "value": "text-center"
-          },
-          {
-            "name": "BG Gray",
-            "value": "bg-gray"
           }
         ]
       }
@@ -201,31 +161,6 @@
     ]
   },
   {
-    "id": "tab",
-    "fields": [
-      {
-        "component": "text",
-        "name": "tabname",
-        "label": "Tab Name",
-        "description": "The label shown for this Tab"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
-      }
-    ]
-  },  
-  {
     "id": "columns",
     "fields": [
       {
@@ -241,19 +176,6 @@
         "name": "rows",
         "value": "",
         "label": "Rows"
-      },
-      {
-        "component": "select",
-        "name": "classes",
-        "value": "",
-        "label": "Style",
-        "description": "The Hero style",
-        "valueType": "string",
-        "options": [
-          {"name": "Default", "value": ""},
-          {"name": "Hero", "value": "col-hero"},
-          {"name": "Red", "value": "col-red"}
-        ]
       }
     ]
   },
@@ -294,65 +216,98 @@
     ]
   },
   {
-    "id": "video-teaser",
+    "id": "low-fare-destinations",
     "fields": [
-      {
-        "component": "aem-content",
-        "name": "video",
-        "label": "Video asset",
-        "description": "Pick a DAM video asset from the content tree (e.g. /content/dam/.../movie.mp4). The searchable asset selector optimizes as an image and breaks video, so this uses the content-tree picker. For streaming or external sources, use the Video URL field below instead."
-      },
       {
         "component": "text",
         "valueType": "string",
-        "name": "videoUrl",
-        "label": "Video URL (optional)",
-        "value": "",
-        "description": "Overrides the asset. Use for streaming: an .m3u8 manifest, a Dynamic Media OpenAPI / Scene7 URL, or a YouTube link."
+        "name": "title",
+        "label": "Title",
+        "value": "Explore our top destinations from",
+        "required": true,
+        "description": "出発地の都市名はページのパス（国）から自動で付きます。ここには入力しません。",
+        "validation": {
+          "maxSize": 80
+        }
       },
       {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Teaser Text",
-        "description": "Heading + description + an optional CTA link, authored as rich text.",
-        "valueType": "string"
+        "component": "aem-content",
+        "name": "viewAll",
+        "label": "View all link",
+        "description": "「View all」ボタンのリンク先ページ"
       },
       {
         "component": "select",
-        "name": "classes",
-        "value": "",
-        "label": "Style",
+        "name": "classes_variant",
+        "label": "Layout",
+        "valueType": "string",
+        "value": "variant-2",
+        "options": [
+          {
+            "name": "Variant 2 (3 tiles, wide tile alternates)",
+            "value": "variant-2"
+          },
+          {
+            "name": "Variant 1 (simple grid)",
+            "value": "variant-1"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "classes_visibility",
+        "label": "Visibility",
         "valueType": "string",
         "options": [
-          {"name": "Default", "value": ""},
-          {"name": "Full width", "value": "full-width"},
-          {"name": "Short", "value": "short"},
-          {"name": "Tall", "value": "tall"},
-          {"name": "Contain video", "value": "contain"}
+          {
+            "name": "Hide in Desktop",
+            "value": "hide-desktop"
+          },
+          {
+            "name": "Hide in Mobile",
+            "value": "hide-mobile"
+          }
         ]
       }
     ]
   },
   {
-    "id": "visual-content-fragment",
+    "id": "low-fare-destination",
     "fields": [
       {
         "component": "aem-content",
-        "name": "fragment",
-        "label": "Content Fragment",
-        "description": "Pick the Content Fragment to render from the content tree (e.g. /content/dam/hol/cf/...). The searchable asset selector does not handle Content Fragments, so this uses the content-tree picker."
+        "name": "destination",
+        "label": "Destination (Content Fragment)",
+        "required": true,
+        "description": "/content/dam/eds-ue/destinations から行き先の Content Fragment を選びます。都市名・空港コード・写真は CF 側で管理し、価格は自動で取得します。",
+        "validation": {
+          "rootPath": "/content/dam/eds-ue/destinations"
+        }
+      }
+    ]
+  },
+  {
+    "id": "tab",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabname",
+        "label": "Tab Name",
+        "description": "The label shown for this Tab"
       },
       {
-        "component": "select",
+        "component": "reference",
         "valueType": "string",
-        "name": "template",
-        "label": "Template",
-        "value": "destination_campaign",
-        "description": "Rendering template.",
-        "options": [
-          {"name": "Destination Campaign", "value": "destination_campaign"}
-        ]
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
       }
     ]
   }

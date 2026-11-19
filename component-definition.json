@@ -83,21 +83,6 @@
       "id": "blocks",
       "components": [
         {
-          "title": "Tabs",
-          "id": "tabs",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Tabs",
-                  "filter": "tabs"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Cards",
           "id": "cards",
           "plugins": {
@@ -113,21 +98,6 @@
           }
         },
         {
-          "title": "Tab",
-          "id": "tab",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block/item",
-                "template": {
-                  "name": "Tab",
-                  "model": "tab"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Card",
           "id": "card",
           "plugins": {
@@ -137,23 +107,6 @@
                 "template": {
                   "name": "Card",
                   "model": "card"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Quote",
-          "id": "quote",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Quote",
-                  "model": "quote",
-                  "quote": "<p> Think, McFly! Think! </p>",
-                  "author": "Biff Tannen"
                 }
               }
             }
@@ -205,35 +158,63 @@
           }
         },
         {
-          "title": "Video Teaser",
-          "id": "video-teaser",
+          "title": "Low Fare Destinations",
+          "id": "low-fare-destinations",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Video Teaser",
-                  "model": "video-teaser",
-                  "videoUrl": "",
-                  "text": "<p>Discover</p><h2>Your next adventure starts here</h2><p>Full-bleed background video with an overlaid teaser. Pick a video asset, or paste a streaming URL.</p><p><a href=\"#\">Explore destination</a></p>",
-                  "classes": ""
+                  "name": "Low Fare Destinations",
+                  "model": "low-fare-destinations",
+                  "filter": "low-fare-destinations",
+                  "title": "Explore our top destinations from",
+                  "classes_variant": "variant-2"
                 }
               }
             }
           }
         },
         {
-          "title": "Visual Content Fragment",
-          "id": "visual-content-fragment",
+          "title": "Low Fare Destination",
+          "id": "low-fare-destination",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Low Fare Destination",
+                  "model": "low-fare-destination"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Tabs",
+          "id": "tabs",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Visual Content Fragment",
-                  "model": "visual-content-fragment",
-                  "fragment": "/content/dam/hol/cf/kul-to-tokyo",
-                  "template": "destination_campaign"
+                  "name": "Tabs",
+                  "filter": "tabs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Tab",
+          "id": "tab",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Tab",
+                  "model": "tab"
                 }
               }
             }

@@ -15,23 +15,13 @@
       "hero",
       "cards",
       "columns",
-      "fragment",
-      "quote",
-      "tabs",
-      "video-teaser",
-      "visual-content-fragment"
+      "fragment"
     ]
   },
   {
     "id": "cards",
     "components": [
       "card"
-    ]
-  },
-  {
-    "id": "tabs",
-    "components": [
-      "tab"
     ]
   },
   {
@@ -47,6 +37,18 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "low-fare-destinations",
+    "components": [
+      "low-fare-destination"
+    ]
+  },
+  {
+    "id": "tabs",
+    "components": [
+      "tab"
     ]
   }
 ]

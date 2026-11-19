@@ -1,0 +1,98 @@
+{
+ "total": 15,
+ "offset": 0,
+ "limit": 15,
+ "data": [
+  {
+   "Origin": "KUL",
+   "Destination": "NRT",
+   "Price": "2733",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "AOR",
+   "Price": "298",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "ICN",
+   "Price": "2538",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "TGG",
+   "Price": "257",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "MEL",
+   "Price": "4160",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "KUA",
+   "Price": "257",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "SIN",
+   "Price": "199",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "LHR",
+   "Price": "3890",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "KUL",
+   "Destination": "DPS",
+   "Price": "620",
+   "Currency": "MYR"
+  },
+  {
+   "Origin": "SIN",
+   "Destination": "KUL",
+   "Price": "168",
+   "Currency": "SGD"
+  },
+  {
+   "Origin": "SIN",
+   "Destination": "LHR",
+   "Price": "1290",
+   "Currency": "SGD"
+  },
+  {
+   "Origin": "SIN",
+   "Destination": "DPS",
+   "Price": "310",
+   "Currency": "SGD"
+  },
+  {
+   "Origin": "SIN",
+   "Destination": "NRT",
+   "Price": "780",
+   "Currency": "SGD"
+  },
+  {
+   "Origin": "SIN",
+   "Destination": "ICN",
+   "Price": "690",
+   "Currency": "SGD"
+  },
+  {
+   "Origin": "SIN",
+   "Destination": "MEL",
+   "Price": "540",
+   "Currency": "SGD"
+  }
+ ],
+ ":type": "sheet"
+}
