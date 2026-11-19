@@ -18,9 +18,16 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 import { resolveOrigin } from '../../scripts/market.js';
 
 const CF_SHEET = '/data/cf/lowfare-destinations.json';
-const DEMO_FARE_API = '/data/demo-fares.json';
+/*
+ * Fare API (called at display time, never authored).
+ * Default: MH Fare CFs exposed like an API by the persisted query global/lowfare-fares.
+ * Switch to the real external API by setting the metadata "low-fare-api" (e.g. one row in the
+ * bulk metadata sheet for /**) to a URL template with {origin} and optionally {destination}.
+ */
+const PUBLISH_ORIGIN = 'https://publish-p236456-e2388687.adobeaemcloud.com';
+const DEFAULT_FARE_API = '/graphql/execute.json/global/lowfare-fares;origin={origin}';
 const MAX_DESTINATIONS = 15;
-const FARE_CACHE_TTL = 30 * 60 * 1000;
+const DEFAULT_FARE_CACHE_SECONDS = 60; // fares change often; metadata "low-fare-cache-seconds"
 const DESKTOP_MQ = '(min-width: 900px)';
 
 const isAuthor = () => window.location.hostname.startsWith('author-');
@@ -133,13 +140,34 @@ function buildPicture(cf) {
 
 /* ---------- fares (never authored) ---------- */
 
+const pick = (obj, ...keys) => keys.map((k) => obj?.[k])
+  .find((v) => v !== undefined && v !== null);
+const code = (v) => `${v ?? ''}`.trim().toUpperCase();
+
+/** First array of fare-like objects: sheet rows, GraphQL list items, { fares: [...] } */
+function fareRows(json) {
+  if (Array.isArray(json)) return json;
+  if (!json || typeof json !== 'object') return null;
+  if (Array.isArray(json.items)) return json.items;
+  if (Array.isArray(json.fares)) return json.fares;
+  if (Array.isArray(json.data)) return json.data;
+  const nested = [json.fares, json.data].filter((v) => v && typeof v === 'object');
+  if (json.data && typeof json.data === 'object') nested.push(...Object.values(json.data));
+  return nested.map(fareRows).find(Array.isArray) || null;
+}
+
+/**
+ * Normalizes the fare API response. Accepts:
+ *  - a list (sheet rows, GraphQL items, { fares }) with origin/destination/price/currency
+ *    (any letter case), filtered by route
+ *  - a single fare object { price, currency } (per-route endpoint)
+ */
 export function pickFare(json, origin, destination) {
   if (!json) return null;
-  const sheet = json.fares || json.data;
-  const rows = Array.isArray(sheet) ? sheet : sheet?.data;
-  const data = Array.isArray(rows)
-    ? rows.find((r) => `${r.Origin || ''}`.trim().toUpperCase() === origin
-      && `${r.Destination || ''}`.trim().toUpperCase() === destination)
+  const rows = fareRows(json);
+  const data = rows
+    ? rows.find((r) => code(pick(r, 'destination', 'Destination')) === destination
+      && (!pick(r, 'origin', 'Origin') || code(pick(r, 'origin', 'Origin')) === origin))
     : (json.data || json);
   if (!data) return null;
   const raw = `${data.price ?? data.Price ?? data.amount ?? ''}`.replace(/,/g, '').trim();
@@ -148,17 +176,17 @@ export function pickFare(json, origin, destination) {
   return { price, currency: `${data.currency || data.Currency || 'MYR'}`.trim() };
 }
 
-async function fetchFare(template, origin, destination) {
+async function fetchFare(template, origin, destination, ttlSeconds) {
   const cacheKey = `lfd:${origin}-${destination}`;
   try {
     const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
-    if (cached && Date.now() - cached.ts < FARE_CACHE_TTL) return cached.fare;
+    if (ttlSeconds > 0 && cached && Date.now() - cached.ts < ttlSeconds * 1000) return cached.fare;
   } catch (e) { /* storage unavailable */ }
   const url = template
     .replace('{origin}', encodeURIComponent(origin))
     .replace('{destination}', encodeURIComponent(destination));
   const fare = pickFare(await getJson(url), origin, destination);
-  if (fare) {
+  if (fare && ttlSeconds > 0) {
     try {
       sessionStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), fare }));
     } catch (e) { /* ignore */ }
@@ -283,13 +311,17 @@ export default async function decorate(block) {
     block.append(p);
   }
 
-  const fareApi = getMetadata('low-fare-api') || `${window.hlx?.codeBasePath || ''}${DEMO_FARE_API}`;
+  // Author (UE): same-origin persisted query = draft fares. EDS: AEM Publish.
+  const fareApi = getMetadata('low-fare-api')
+    || `${isAuthor() ? '' : PUBLISH_ORIGIN}${DEFAULT_FARE_API}`;
+  const cacheMeta = Number.parseInt(getMetadata('low-fare-cache-seconds'), 10);
+  const ttl = Number.isFinite(cacheMeta) ? cacheMeta : DEFAULT_FARE_CACHE_SECONDS;
   if (!origin || !fareApi) {
     block.classList.add('no-price');
     return;
   }
   tiles.forEach(async ({ tile, cf }) => {
-    const fare = await fetchFare(fareApi, origin.code, cf.airportCode);
+    const fare = await fetchFare(fareApi, origin.code, cf.airportCode, ttl);
     if (fare) {
       tile.querySelector('.lfd-price').textContent = formatFare(fare);
       tile.classList.add('has-price');

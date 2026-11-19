@@ -1,0 +1,15 @@
+query LowFareFares($origin: String!) {
+  mhFareList(
+    filter: {
+      _path: { _expressions: [{ value: "/content/dam/hol/fares/", _operator: STARTS_WITH }] }
+      origin: { _expressions: [{ value: $origin }] }
+    }
+  ) {
+    items {
+      origin
+      destination
+      price
+      currency
+    }
+  }
+}

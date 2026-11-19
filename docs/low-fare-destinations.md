@@ -43,11 +43,24 @@ CF の置き場所：`/content/dam/hol/lowfare-destinations/`（サンプル10�
 
 出発地と同じ空港の行き先（例：KUL のページの Kuala Lumpur）は自動で表示しません。
 
-## 4. 価格（入力させない）
+## 4. 価格（入力させない・表示のたびに取得）
 
-- ページのメタデータ `low-fare-api`（一括メタデータで全体に設定）の URL テンプレート `...{origin}...{destination}...`、またはシート形式（Origin / Destination / Price / Currency）。
-- 未設定のときはデモ用の `/data/demo-fares.json` を使います。**本番前に実際の運賃 API に置き換えてください。**
-- 価格が取れない行き先は「All-in return from」も含めて自動で隠します。
+価格は**表示のたびに取得**します。いまは外部 API の代わりに、CF「MH Fare」（`/content/dam/hol/fares/`、1路線1件）を **API と同じ形**で返します。
+
+| 項目 | 内容 |
+|---|---|
+| 呼ぶ URL（既定） | `https://publish-p236456-e2388687.adobeaemcloud.com/graphql/execute.json/global/lowfare-fares;origin=KUL` |
+| 返す形式 | `{ data: { mhFareList: { items: [{ origin, destination, price, currency }] } } }` |
+| リクエスト数 | 1ページにつき1回（出発地の運賃一覧をまとめて取得） |
+| キャッシュ | ブラウザ30秒、CDN 60秒（永続クエリ側の設定）。ブロック側の保持は60秒（メタデータ `low-fare-cache-seconds` で変更でき、`0` で保持しない） |
+| UE（author） | 同じクエリを author から読むので、publish 前の運賃も確認できる |
+
+**外部 API への切り替え：** メタデータ `low-fare-api` に URL テンプレートを1行入れるだけです（一括メタデータで `/**` に設定すれば全ページに効きます）。
+- `{origin}` だけを含む URL → 出発地の運賃一覧を返す API
+- `{destination}` も含む URL → 1路線ずつ返す API
+- 受け付ける形式：一覧（`items` / `fares` / `data` の配列。各要素に origin・destination・price・currency。大文字小文字は問わない）、または1件（`{ price, currency }`）
+
+運賃 CF の作り方：CF モデル **MH Fare**（origin・destination：大文字3文字、price：数値、currency：大文字3文字。すべて必須）で作って **publish** します。60秒ほどで表示に反映されます。
 
 ## 5. UE での入力チェック
 
