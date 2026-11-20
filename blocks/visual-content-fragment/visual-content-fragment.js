@@ -133,7 +133,7 @@ export default async function decorate(block) {
 
   block.textContent = '';
   if (!path) {
-    block.innerHTML = '<p class="vcf-error">Content Fragment が指定されていません。</p>';
+    block.innerHTML = '<p class="vcf-error">No Content Fragment selected.</p>';
     return;
   }
 
@@ -143,6 +143,6 @@ export default async function decorate(block) {
     const template = TEMPLATES[key] || TEMPLATES.destination_campaign;
     block.innerHTML = render(template, values);
   } catch (e) {
-    block.innerHTML = '<p class="vcf-error">Content Fragment を読み込めませんでした。</p>';
+    block.innerHTML = '<p class="vcf-error">Could not load the Content Fragment.</p>';
   }
 }

@@ -62,7 +62,7 @@ export default async function decorate(block) {
       // ==== 変更4: 選択状態を section.dataset に保存 ====
       if (section) {
         section.dataset.selectedTabId = button.id;
-        console.log('保存した selectedTabId:', section.dataset.selectedTabId);
+        console.log('saved selectedTabId:', section.dataset.selectedTabId);
       }
     });
 

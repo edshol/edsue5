@@ -284,9 +284,9 @@ export default async function decorate(block) {
       list.append(tile);
     } else if (isAuthor()) {
       // Visible only in Universal Editor, so authors can select the item and fix it.
-      let message = `CF が見つかりません: ${path}`;
-      if (!path) message = '行き先の CF を選んでください（右のプロパティ → Destination）';
-      else if (cf) message = `出発地と同じ空港です: ${cf.airportCode}`;
+      let message = `Content Fragment not found: ${path}`;
+      if (!path) message = 'Pick a destination CF (properties panel → Destination)';
+      else if (cf) message = `Same airport as the origin: ${cf.airportCode}`;
       list.append(buildPlaceholder(row, message));
     }
   });
@@ -295,7 +295,7 @@ export default async function decorate(block) {
   if (isAuthor() && !items.length) {
     const hint = document.createElement('p');
     hint.className = 'lfd-hint';
-    hint.textContent = 'コンテンツツリーでこのブロックを選び、「+」→ Low Fare Destination で行き先を追加してください。';
+    hint.textContent = 'Select this block in the content tree, then use “+” → Low Fare Destination to add destinations.';
     block.append(hint);
   }
 
