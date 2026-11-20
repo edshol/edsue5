@@ -45,7 +45,7 @@
           "label": "Title",
           "value": "Explore our top destinations from",
           "required": true,
-          "description": "出発地の都市名はページのパス（国）から自動で付きます。ここには入力しません。",
+          "description": "The origin city is added automatically from the page path (market). Do not type it here.",
           "validation": {
             "maxSize": 80
           }
@@ -54,7 +54,7 @@
           "component": "aem-content",
           "name": "viewAll",
           "label": "View all link",
-          "description": "「View all」ボタンのリンク先ページ"
+          "description": "Page the \"View all\" button links to"
         },
         {
           "component": "select",
@@ -99,7 +99,7 @@
           "name": "destination",
           "label": "Destination (Content Fragment)",
           "required": true,
-          "description": "/content/dam/hol/lowfare-destinations から行き先の Content Fragment（MH Low Fare Destination）を選びます。都市名・空港コード・写真は CF 側で管理し、価格は自動で取得します。",
+          "description": "Pick a destination Content Fragment (MH Low Fare Destination) from /content/dam/hol/lowfare-destinations. City, airport code and photos live in the CF; the price is fetched automatically.",
           "validation": {
             "rootPath": "/content/dam/hol/lowfare-destinations"
           }
